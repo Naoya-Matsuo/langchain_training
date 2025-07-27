@@ -12,6 +12,9 @@ from typing_extensions import Annotated, TypedDict
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import tools_condition
 from langchain_ollama.chat_models import ChatOllama
+from IPython.display import Image, display
+from PIL import Image as PILImage # Pillow の Image クラスをインポート
+import io # バイトデータを扱うためにインポート
 
 # Langserve のインポートを追加
 from langserve import add_routes
@@ -125,6 +128,22 @@ app = FastAPI(
 # Langserve のルーティングを追加
 # `/graph` というパスでアプリケーションを公開します
 add_routes(app, app_graph, path="/graph")
+
+
+
+graph = graph.compile()
+
+# Mermaid形式のPNGデータを取得
+mermaid_png_data = graph.get_graph().draw_mermaid_png()
+
+# バイトデータからPIL Imageオブジェクトを作成
+image = PILImage.open(io.BytesIO(mermaid_png_data))
+
+# 画像をローカルに保存
+# 保存したいファイル名とパスを指定してください
+output_filename = "my_langgraph.png"
+image.save(output_filename)
+
 
 # このファイルが直接実行された場合に Uvicorn でサーバーを起動
 # このブロックは、Langserve がアプリケーションをインポートする際には実行されません。
