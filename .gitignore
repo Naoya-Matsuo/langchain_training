@@ -1,0 +1,9 @@
+data/
+instance/
+semantic/
+training/
+temp/checkpoint
+temp/data
+!.py
+!.html
+!.ipynb
